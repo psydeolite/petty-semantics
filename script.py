@@ -20,6 +20,7 @@ def run(filename):
         return
 
     stack = [ tmp ]
+    points = []
     screen = new_screen()
         
     for command in commands:
@@ -49,30 +50,38 @@ def run(filename):
         elif command[0]=='scale':
             #scale
             print 'scale'
+            s=make_scale(command[1], command[2], command[3])
+            matrix_mult(stack[-1], s)
+            stack[-1]=s
         elif command[0]=='box':
             #box
-            add_box(tmp, command[1], command[2], command[3], command[4], command[5], command[6])
-            matrix_mult(stack[-1], tmp)
-            draw_polygons(tmp, screen, color)
-            tmp=[]
+            add_box(points, command[1], command[2], command[3], command[4], command[5], command[6])
+            matrix_mult(stack[-1], points)
+            draw_polygons(points, screen, color)
+            points=[]
         elif command[0]=='sphere':
             #sphere
-            add_sphere(tmp, command[1], command[2], command[3], command[4], 5)
-            matrix_mult(stack[-1], tmp)
-            draw_polygons(tmp, screen, color)
-            tmp=[]
+            add_sphere(points, command[1], command[2], command[3], command[4], 5)
+            matrix_mult(stack[-1], points)
+            draw_polygons(points, screen, color)
+            points=[]
         elif command[0]=='torus':
             #torus
-            add_torus(tmp, command[1], command[2], command[3], command[4], command[5], 5)
-            matrix_mult(stack[-1], tmp)
-            draw_polygons(tmp, screen, color)
-            tmp=[]
+            add_torus(points, command[1], command[2], command[3], command[4], command[5], 5)
+            matrix_mult(stack[-1], points)
+            draw_polygons(points, screen, color)
+            points=[]
         elif command[0]=='line':
             #line
             print 'line'
+            add_edge(points, command[1], command[2], command[3], command[4], command[5], command[6])
+            matrix_mult(stack[-1], points)
+            draw_lines(points, screen, color)
+            points=[]
         elif command[0]=='save':
             #save
             print 'save'
+            save_extension(screen, command[1])
         elif command[0]=='display':
             #display
             display(screen)
